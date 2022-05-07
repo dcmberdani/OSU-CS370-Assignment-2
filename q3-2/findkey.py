@@ -1,38 +1,29 @@
 #from Crypto.Cipher import AES
 #from Crypto.Util.Padding import pad
 from base64 import b64encode
-
 from cryptography.hazmat.primitives.ciphers import Cipher, algorithms, modes
 
 initVector = b'\x00'*16
 
 #Grab Plaintext
-#with open('plaintext.txt', 'r') as f:
-    #plaintext = f.read()
-    #plaintext = plaintext.strip()
-plaintext = "This is a top secret."
-ptbytes = b'This is a top secret.'
-#print(len(ptbytes))
-#print(ptbytes)
+with open('plaintext.txt', 'r') as f:
+    plaintext = f.read()
+    plaintext = plaintext.strip()
+    ptbytes = plaintext.encode('utf-8')
 
 #Pad the plaintext with all '\x0b's
 padded_ptbytes = ptbytes + (16 - (len(plaintext) % 16)) * b'\x0b'
-#print(padded_ptbytes)
-
-
 
 #Grab ciphertext
-#with open('ciphertext.txt', 'r') as f:
-#    ciphertext = f.open()
-#    ciphertext = ciphertext.strip()
+with open('ciphertext.txt', 'r') as f:
+    ciphertext = f.read()
+    ciphertext = ciphertext.strip()
 
 # Convert the hex to bytes, then bytes to a string
 #   This string is used to compare with outputted values from dictionary
 #   In the final implementation this is redundant but hey I wanted to try it
-ciphertext = "8d20e5056a8d24d0462ce74e4904c1b513e10d1df4a2ef2ad4540fae1ca0aaf9"    
 ct_hex_bytes = bytes.fromhex(ciphertext)
 ctstr = b64encode(ct_hex_bytes).decode('utf-8')
-
 
 
 with open('dictionary.txt', 'r') as f:
@@ -62,7 +53,7 @@ with open('dictionary.txt', 'r') as f:
         enchex = new_ctbytes.hex()
 
         if (ciphertext == enchex) and (ctstr == encstr): 
-            print('THERES A MATCH: ' +  currLine + '\n\tHERES THE PADDING: ' + str(11))
-            finalKey = currLine
+            #print('THERES A MATCH: ' +  currLine)
+            finalKey = p_currLine
 
-print("\nKey: " + finalKey + '\nPadding: ' + str(11))
+print("\nKey: " + finalKey)
